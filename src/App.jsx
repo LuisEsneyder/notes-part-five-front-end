@@ -33,6 +33,14 @@ const App = () => {
       setNotes(inicialNotes);
     });
   }, []);
+  useEffect(() => {
+    const loggedUserJson = window.localStorage.getItem("loggedNoteappUser");
+    if (loggedUserJson) {
+      const user = JSON.parse(loggedUserJson);
+      setUser(user);
+      noteService.setToken(user.token);
+    }
+  }, []);
   const notesToShow = showAll ? notes : notes.filter((note) => note.important);
   const toggleImportanceOf = (id) => {
     const note = notes.find((element) => element._id === id);
@@ -85,6 +93,7 @@ const App = () => {
     event.preventDefault();
     try {
       const user = await loginService.loging({ username, password });
+      window.localStorage.setItem("loggedNoteappUser", JSON.stringify(user));
       noteService.setToken(user.token);
       setUser(user);
       setUsername("");
