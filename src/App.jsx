@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Note from "./components/Note";
 import Notificacion from "./components/Notificacion";
 import noteService from "./services/note";
@@ -27,6 +27,7 @@ const App = () => {
   const [showAll, setShowAll] = useState(true);
   const [errorMensaje, setErrorMensaje] = useState(null);
   const [user, setUser] = useState(null);
+  const noteFormRef = useRef();
 
   useEffect(() => {
     noteService.getAll().then((inicialNotes) => {
@@ -70,6 +71,7 @@ const App = () => {
     setShowAll(!showAll);
   };
   const createNote = (note) => {
+    noteFormRef.current.toggleVisible();
     noteService
       .create(note)
       .then((retunedNota) => {
@@ -104,7 +106,7 @@ const App = () => {
   };
   const noteForm = () => {
     return (
-      <Togglable buttonLabel="new note">
+      <Togglable buttonLabel="new note" ref={noteFormRef}>
         <NoteForm createNote={createNote} />
       </Togglable>
     );
