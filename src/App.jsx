@@ -4,6 +4,8 @@ import Notificacion from "./components/Notificacion";
 import noteService from "./services/note";
 import loginService from "./services/login";
 import LoginForm from "./components/LoginForm";
+import Togglable from "./components/Togglable";
+import NoteForm from "./components/NoteForm";
 
 const Footer = () => {
   const footerStyle = {
@@ -110,35 +112,29 @@ const App = () => {
     }
   };
   const loginForm = () => {
-    const hideWhenVisible = { display: loginVisible ? "none" : "" };
-    const showWhenVisible = { display: loginVisible ? "" : "none" };
     return (
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setLoginVisible(true)}>log in</button>
-        </div>
-        <div style={showWhenVisible}>
-          <LoginForm
-            username={username}
-            password={password}
-            handlePasswordChange={({ target }) => setPassword(target.value)}
-            handleUsernameChange={({ target }) => setUsername(target.value)}
-            handleSubmit={handleLogin}
-          />
-          <button onClick={() => setLoginVisible(false)}>cancel</button>
-        </div>
-      </div>
+      <Togglable buttonLabel="log in">
+        <LoginForm
+          username={username}
+          password={password}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handleSubmit={handleLogin}
+        />
+      </Togglable>
     );
   };
-  const noteForm = () => (
-    <form onSubmit={addNote}>
-      <input
-        value={newNote}
-        onChange={({ target }) => setNewNote(target.value)}
-      />
-      <button type="submit">save</button>
-    </form>
-  );
+  const noteForm = () => {
+    return (
+      <Togglable buttonLabel="new note">
+        <NoteForm
+          onSubmit={addNote}
+          value={newNote}
+          handleNoteChange={({ target }) => setNewNote(target.value)}
+        />
+      </Togglable>
+    );
+  };
   return (
     <div>
       <h1>Notes</h1>
